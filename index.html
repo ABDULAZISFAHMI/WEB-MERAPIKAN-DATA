@@ -7,29 +7,50 @@
 </head>
 <body>
 
+<!-- LOGIN SCREEN -->
+<div id="loginScreen">
+  <h2>Login untuk Melanjutkan</h2>
+  <p>Tanpa login hanya bisa digunakan 3 kali</p>
+  <button onclick="login('google')">Login Google</button>
+  <button onclick="login('facebook')">Login Facebook</button>
+  <button onclick="continueAsGuest()">Lanjut Tanpa Login</button>
+</div>
+
+<!-- APP -->
+<div id="app" class="hidden">
+
 <header>
   <h2>Data Cleaner</h2>
-  <div class="menu">
-    <button id="menuBtn">⋮</button>
-    <div id="dropdown" class="hidden">
-      <button onclick="showHistory()">History</button>
-      <button onclick="login()">Login</button>
-      <button onclick="logout()">Logout</button>
-    </div>
+  <button id="menuBtn">⋮</button>
+
+  <div id="dropdown" class="hidden">
+    <button onclick="showHistory()">History</button>
+    <button onclick="logout()">Logout</button>
   </div>
 </header>
 
 <main>
   <label>Input Teks (Belum Rapi)</label>
-  <textarea id="inputText" placeholder="Tempelkan teks belum rapi..."></textarea>
+  <textarea id="inputText" placeholder="Tempelkan teks di sini..."></textarea>
 
-  <button id="cleanBtn">Rapikan Data</button>
+  <div class="actions">
+    <select id="mode">
+      <option value="clean">Rapikan Standar</option>
+      <option value="az">Urutkan A-Z</option>
+      <option value="num">Urutkan 1-100</option>
+      <option value="line">Rapikan Per Baris</option>
+    </select>
+
+    <button id="cleanBtn">Rapikan Teks</button>
+  </div>
 
   <label>Output Teks (Sudah Rapi)</label>
   <textarea id="outputText" readonly></textarea>
 </main>
 
-<!-- Modal History -->
+</div>
+
+<!-- MODAL HISTORY -->
 <div id="historyModal" class="modal hidden">
   <h3>History Perapian</h3>
   <ul id="historyList"></ul>
@@ -39,3 +60,4 @@
 <script src="script.js"></script>
 </body>
 </html>
+
