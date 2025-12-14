@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Data Cleaner</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+  <h2>Data Cleaner</h2>
+  <div class="menu">
+    <button id="menuBtn">⋮</button>
+    <div id="dropdown" class="hidden">
+      <button onclick="showHistory()">History</button>
+      <button onclick="login()">Login</button>
+      <button onclick="logout()">Logout</button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <label>Input Teks (Belum Rapi)</label>
+  <textarea id="inputText" placeholder="Tempelkan teks belum rapi..."></textarea>
+
+  <button id="cleanBtn">Rapikan Data</button>
+
+  <label>Output Teks (Sudah Rapi)</label>
+  <textarea id="outputText" readonly></textarea>
+</main>
+
+<!-- Modal History -->
+<div id="historyModal" class="modal hidden">
+  <h3>History Perapian</h3>
+  <ul id="historyList"></ul>
+  <button onclick="closeHistory()">Tutup</button>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
