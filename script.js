@@ -1,47 +1,102 @@
-let usageCount = localStorage.getItem("usage") || 0;
-let isLoggedIn = localStorage.getItem("login") === "true";
+let usage = Number(localStorage.getItem("usage")) || 0;
+let loggedIn = localStorage.getItem("login") === "true";
 let history = JSON.parse(localStorage.getItem("history")) || [];
 
-// Menu
+/* INIT */
+window.onload = () => {
+  if (loggedIn || usage < 3) {
+    showApp();
+  }
+};
+
+/* LOGIN FLOW */
+function login(provider) {
+  alert("Login dengan " + provider + " (OAuth)");
+  loggedIn = true;
+  localStorage.setItem("login", "true");
+  showApp();
+}
+
+function continueAsGuest() {
+  showApp();
+}
+
+function logout() {
+  loggedIn = false;
+  localStorage.setItem("login", "false");
+  location.reload();
+}
+
+function showApp() {
+  document.getElementById("loginScreen").classList.add("hidden");
+  document.getElementById("app").classList.remove("hidden");
+}
+
+/* MENU */
 document.getElementById("menuBtn").onclick = () => {
   document.getElementById("dropdown").classList.toggle("hidden");
 };
 
-// Clean Button
+/* CLEAN TEXT (FIXED & STABLE) */
 document.getElementById("cleanBtn").onclick = () => {
-  if (!isLoggedIn && usageCount >= 3) {
+  if (!loggedIn && usage >= 3) {
     alert("Batas 3 kali penggunaan tercapai. Silakan login.");
     return;
   }
 
-  const input = document.getElementById("inputText").value;
-  const output = cleanText(input);
+  const text = document.getElementById("inputText").value;
+  const mode = document.getElementById("mode").value;
 
-  document.getElementById("outputText").value = output;
+  if (!text.trim()) return;
 
-  usageCount++;
-  localStorage.setItem("usage", usageCount);
+  let result = "";
 
-  history.push(output);
+  switch (mode) {
+    case "az":
+      result = text.split("\n").sort().join("\n");
+      break;
+
+    case "num":
+      result = text
+        .split("\n")
+        .map(Number)
+        .filter(n => !isNaN(n))
+        .sort((a, b) => a - b)
+        .join("\n");
+      break;
+
+    case "line":
+      result = text
+        .split("\n")
+        .map(l => l.trim())
+        .filter(l => l !== "")
+        .join("\n");
+      break;
+
+    default:
+      result = text
+        .replace(/\s+/g, " ")
+        .replace(/\n+/g, "\n")
+        .trim();
+  }
+
+  document.getElementById("outputText").value = result;
+
+  usage++;
+  localStorage.setItem("usage", usage);
+
+  history.push(result);
   localStorage.setItem("history", JSON.stringify(history));
 };
 
-// Text Cleaner Logic
-function cleanText(text) {
-  return text
-    .replace(/\s+/g, " ")
-    .replace(/\n+/g, "\n")
-    .trim();
-}
-
-// History
+/* HISTORY */
 function showHistory() {
   const list = document.getElementById("historyList");
   list.innerHTML = "";
 
-  history.forEach((item, index) => {
+  history.forEach((item, i) => {
     const li = document.createElement("li");
-    li.textContent = `#${index + 1}: ${item.substring(0, 50)}...`;
+    li.textContent = `#${i + 1} - ${item.substring(0, 40)}...`;
     list.appendChild(li);
   });
 
@@ -50,16 +105,4 @@ function showHistory() {
 
 function closeHistory() {
   document.getElementById("historyModal").classList.add("hidden");
-}
-
-// Login / Logout (Placeholder OAuth)
-function login() {
-  alert("Login Google / Facebook (integrasi OAuth)");
-  isLoggedIn = true;
-  localStorage.setItem("login", "true");
-}
-
-function logout() {
-  isLoggedIn = false;
-  localStorage.setItem("login", "false");
 }
